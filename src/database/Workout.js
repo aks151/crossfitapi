@@ -53,9 +53,28 @@ const updateOneWorkout = (workoutId, changes) => {
     return updatedWorkoutObj;
 }
 
+const deleteOneWorkout = (workoutId) => {
+    const workouts1 = getAllWorkouts();
+
+    const workoutIndex = workouts1.findIndex(
+        (workoutObj) => workoutObj.id === workoutId
+    );
+
+    if(workoutIndex === -1) return;
+
+    DB.workouts = workouts1.filter(
+        (workoutObj) => workoutObj.id != workoutId
+    );
+
+    utils.saveToDatabase(DB);
+
+    return workouts1[workoutIndex];
+}
+
 module.exports = {
     getAllWorkouts, 
     addNewWorkout, 
     getOneWorkout,
-    updateOneWorkout
+    updateOneWorkout, 
+    deleteOneWorkout
 };
