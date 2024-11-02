@@ -33,8 +33,29 @@ const getOneWorkout = (workoutId) => {
 
 }
 
+const updateOneWorkout = (workoutId, changes) => {
+    const workouts1 = getAllWorkouts();
+
+    const workoutIndex = workouts1.findIndex(
+        (workoutObj) => workoutObj.id === workoutId
+    );
+
+    if(workoutIndex === -1) return;
+
+    const workoutObject = DB.workouts[workoutIndex];
+    const updatedWorkoutObj = {
+        ...workoutObject,
+        ...changes,
+        updatedAt: new Date().toLocaleString("en-US", {timeZone: "UTC"})
+    }
+    DB.workouts[workoutIndex] = updatedWorkoutObj;
+    utils.saveToDatabase(DB);
+    return updatedWorkoutObj;
+}
+
 module.exports = {
     getAllWorkouts, 
     addNewWorkout, 
-    getOneWorkout
+    getOneWorkout,
+    updateOneWorkout
 };

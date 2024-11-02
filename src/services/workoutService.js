@@ -21,11 +21,12 @@ const createNewWorkout = (newWorkout) => {
     return createdWorkout;
 }
 
-const updateOneWorkout = () => {
-    return;
+const updateOneWorkout = (workoutId, body) => {
+    const updatedWorkout = workout.updateOneWorkout(workoutId, body);
+    return updatedWorkout;
 }
 
-const deleteOneWorkout = () => {
+const deleteOneWorkout = (workoutId) => {
     return;
 }
 
