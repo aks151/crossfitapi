@@ -4,3 +4,7 @@ why body parser?
 
 
 destructuring is one thing i have no idea about, will need to learn it.
+
+
+route parameter
+query parameter
