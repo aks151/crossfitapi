@@ -10,9 +10,28 @@ const getOneWorkout = (req, res) => {
         params: {workoutId},
     } = req;
 
-    if(!workoutId) return;
-    const workout = workoutService.getOneWorkout(workoutId);
-    res.send({status:"OK", data: workout});
+    if(!workoutId) {
+        res.status(400)
+        .send({
+            status: "ERROR",
+            data: {error: "parameter workoutId cannot be empty"}
+        });
+    }
+
+    try{
+        const workout = workoutService.getOneWorkout(workoutId);
+        res.send({status:"OK", data: workout});
+    } catch(error) {
+        res
+        .status(error.status || 500)
+        .send({
+            status:"FAILED",
+            data: {
+                error: error.message || error,
+            }
+        })
+    }
+  
 }
 
 const createNewWorkout = (req, res) => {
@@ -24,7 +43,15 @@ const createNewWorkout = (req, res) => {
         !body.exercises ||
         !body.trainerTips
     ){
-        return;
+        res
+        .status(400)
+        .send({
+            status: "FAILED",
+            data: {
+                error:
+                "One of the required keys is not present.(name, mode, equipment,exercises)"
+            }
+        })
     }
 
     const newWorkout = {
@@ -35,8 +62,18 @@ const createNewWorkout = (req, res) => {
         trainerTips: body.trainerTips,
     };
 
-    const createdWorkout = workoutService.createNewWorkout(newWorkout);
+    try {
+        const createdWorkout = workoutService.createNewWorkout(newWorkout);
     res.status(201).send({status: "OK", data: createdWorkout})
+    } catch(error) {
+        res
+        .status(error?.status || 500)
+        .send({status: "FAILED",
+            data: { error: error?.message || error}
+        });
+    }
+
+    
 }
 
 const updateOneWorkout = (req, res) => {

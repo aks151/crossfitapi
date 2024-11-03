@@ -2,35 +2,56 @@ const DB = require("./db.json");
 const utils = require("./utils");
 
 const getAllWorkouts = () => {
-return DB.workouts;
+    try{
+        return DB.workouts; 
+    }catch(error){
+        throw {status: 500, message: error};
+    };
+
 }
 
 const addNewWorkout = (newWorkout) => {
 
     const isAlreadyAdded = DB.workouts.findIndex((workout) => workout.name === newWorkout.name) > -1;
-    if(isAlreadyAdded) return;
-    DB.workouts.push(newWorkout);
+    if(isAlreadyAdded) {
+        throw {
+            status: 400,
+            message: `Workout with the name '${newWorkout.name}' already exists`
+        };
+    }
+    try{
+        DB.workouts.push(newWorkout);
     utils.saveToDatabase(DB);
     return newWorkout;
+
+    } catch(error){
+        throw {status: 500, message: error?.message || error};
+    } ;
+    
 }
 
 const getOneWorkout = (workoutId) => {
-    const workouts = getAllWorkouts();
-    
-
-    const requiredWorkout = workouts.find((workoutObj) => workoutObj.id === workoutId )
-
+    try{
+        const workouts = getAllWorkouts();
+        const requiredWorkout = workouts.find((workoutObj) => workoutObj.id === workoutId )    
+        if(!requiredWorkout) {
+            throw {status: 400,
+                message: `can't find workout with workoutid '${workoutId}'`
+            }
+        }
+        return requiredWorkout;
+    } catch(error) {
+        throw {status: error?.status || 500, 
+        message: error?.message || error
+        };
+    }
+   
     // for(let i = 0; i < workouts.length; i++)
     // {
     //     let workoutObj = workouts[i];
 
     //     if(workoutObj.id === workoutName) return workoutObj;
     // }
-
-    if(!requiredWorkout) return;
-
-    return requiredWorkout;
-
 }
 
 const updateOneWorkout = (workoutId, changes) => {
