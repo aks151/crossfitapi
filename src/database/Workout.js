@@ -1,8 +1,12 @@
 const DB = require("./db.json");
 const utils = require("./utils");
 
-const getAllWorkouts = () => {
+const getAllWorkouts = (filterParams) => {
     try{
+        if(filterParams.mode) {
+            let workouts = DB.workouts;
+            
+        }
         return DB.workouts; 
     }catch(error){
         throw {status: 500, message: error};

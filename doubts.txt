@@ -8,3 +8,6 @@ destructuring is one thing i have no idea about, will need to learn it.
 
 route parameter
 query parameter
+
+while adding the filter params, workoutController, while extracting
+and passing this filter parameter, it was written like {mode}, why????
